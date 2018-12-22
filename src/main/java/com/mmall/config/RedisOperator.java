@@ -72,7 +72,7 @@ public class RedisOperator {
             String oldTimeStamp = jedis.get(key);
             Long oldTime = Long.parseLong(oldTimeStamp);
             // 锁已经过期了：和之前get出来的时间戳对比，若和设置新值后的时间戳不相等，证明已经被其他线程设置获取到锁了
-            if (oldTime > System.currentTimeMillis()){
+            if (System.currentTimeMillis() > oldTime){
                 String newTimeStamp = jedis.getSet(key, String.valueOf(System.currentTimeMillis() + timeout * 1000));
                 if (newTimeStamp == null || (newTimeStamp != null && newTimeStamp.equals(oldTimeStamp))){
                     jedis.expire(key, timeout);
