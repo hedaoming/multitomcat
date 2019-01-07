@@ -11,7 +11,8 @@ public class Task {
 
     @Scheduled(cron="0 */1 * * * ?")
     public void testLock(){
-        if (RedisOperator.lock("Lock", 500, String.valueOf(System.currentTimeMillis() + 500 * 1000)).intValue() > 0){
+        if (RedisOperator.lock("Lock", 5, String.valueOf(System.currentTimeMillis() + 500 * 1000)).intValue() > 0){
+            RedisOperator.deleteKey("lock");
             log.info("get lock!");
         }
     }
